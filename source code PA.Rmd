@@ -1,0 +1,70 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{r}
+#K Mean Clustering 
+#1. Aktifkan library
+library(factoextra)
+library(ggplot2)
+```
+
+```{r}
+#2. Membaca dataset 
+data = read.csv("C:/Users/lapto/OneDrive/Documents/MATERI SEMESTER 2/PEMODELAN STATISTIK TERAPAN/projek/Produksi.csv", header = TRUE, sep = ",")
+data
+```
+
+```{r} 
+#3. Menampilkan summary
+data=data[-1]
+summary(data)
+```
+
+```{r} 
+#4. Menampilkan boxplot masing-masing variabel
+boxplot(data)
+```
+
+```{r} 
+#5a. Penetapan dan Visualisasi Jumlah CLuster yang optimal dengan Elbow
+fviz_nbclust(data, kmeans, method ="wss")
+``` 
+
+```{r}
+#5b. Penetapan dan Visualisasi Jumlah Cluster yang optimal dengan Silhouette 
+fviz_nbclust(data, kmeans, method = "silhouette") 
+```
+
+```{r} 
+#6. Klaster=3
+Clustering=kmeans(data,centers=3,nstart=25) 
+Clustering
+``` 
+
+```{r} 
+#7. Visualisasi Cluster 
+fviz_cluster(Clustering, geom = "point", data = data)
+```
+
+```{r} 
+#8. Menyimpan hasil cluster 
+final=data.frame(data, Clustering$cluster)
+View(final) 
+write.csv(final, file = "C:/Users/lapto/OneDrive/Documents/MATERI SEMESTER 2/PEMODELAN STATISTIK TERAPAN/projek/Final_Cluster.csv", row.names = TRUE)
+``` 
+
+```{r}
+#9. Membaca data hasil cluster
+cluster_result <- read.csv("C:/Users/lapto/OneDrive/Documents/MATERI SEMESTER 2/PEMODELAN STATISTIK TERAPAN/projek/Final_Cluster.csv")
+```
+
+```{r}
+#10. Mengurutkan hasil cluster berdasarkan nomor cluster
+cluster_result_sorted <- cluster_result[order(cluster_result$Clustering.cluster), ]
+cluster_result_sorted
+```
